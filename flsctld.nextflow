@@ -1,0 +1,29 @@
+#!/usr/bin/env nextflow
+
+/*
+========================================================================================
+                                vAMPirus
+========================================================================================
+                       Virus Amplicon Sequencing Analysis Pipeline
+                       Author: Alex J. Veglia and Ramón Rivera-Vicéns
+----------------------------------------------------------------------------------------
+*/
+
+def helpMessage() {
+    log.info """
+
+    This is a workflow to process raw reads and use bbsplit to remove cellular reads
+
+    One mandatory argument:
+        --RunThat           run the whole thing
+
+    """.stripIndent()
+}
+// Show help message
+if (params.help) {
+helpMessage()
+exit 0
+} else if (params.fullHelp) {
+fullHelpMessage()
+exit 0
+}
