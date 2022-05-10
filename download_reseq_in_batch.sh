@@ -1,9 +1,37 @@
+#Sam is testing git commit
 #/bin/#!/usr/bin/env bash
 
 
 type="" ##bacter,arch,vert
-amt="" ##number of files
+amt="" ##number of files  #this does not work if ends in anything but .1
  ##bacteria.3012.1.genomic.fna.gz
+
+#we can make a list of the names to reference for downloading, or we can use the list to sort to find the highest number.
+#I'm in favor of the first option, because some files are missing and we end up creating empty files...
+#For instance, fungi only has 99 files, but its highest value is 103.1. Four numbers are missing, and we created those empty files.
+#Not a huge deal, but the list seems usable since I've generated it anyways (I love regex, lol)
+
+ ##regex to create a list of file names we need to download for each database
+ #(vertebrate\.)(.+)(\.genomic\.fna\.gz)(.+) #search pattern
+ #\2 #keep only the numeric for the genomic.fna.gz files
+ #(vertebrate\.)(.+)(\r)(\n) #delete all other file types
+ #(\r)(\n)fungi(.+) #for some reason the last line, which is usually not named the same pattern, always has to be deleted.
+
+# $ grep -c '' *.txt
+# archaea_to_sort.txt:12
+# bacteria_to_sort.txt:3017
+# fungi_to_sort.txt:99
+# invertebrates_to_sort.txt:369 --> 258.1 higheset value
+# mitochonrdion_to_sort.txt:2
+# other_to_sort.txt:1
+# plant_to_sort.txt:382 --> 234.2 highest value
+# plasmid_to_sort.txt:13
+# plastid_to_sort.txt:5
+# protozoa_to_sort.txt:25
+# vertebrate_mammalian_to_sort.txt:912
+# vertebrate_other_to_sort.txt:841
+# viral_to_sort.txt:4
+
 
 amt=$(SAM PUT COOL COMMAND HERE)
 
