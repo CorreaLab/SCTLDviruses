@@ -1,29 +1,6 @@
 #Sam is testing git commit
 #!/bin/#!/usr/bin/env bash
 
-
-##to remove hidded variables sed $'s/[^[:print:]\t]//g' download_reseq_in_batch.sh
-
-type="" ##bacter,arch,vert
-#amt="" ##number of files  ##this does not work if ends in anything but .1 ##bacteria.3012.1.genomic.fna.gz
-VAR=$(cat fungi_to_sort.txt) #Defines VAR with output from cat, round bracket ensures capture, lingo called command substitution.
-
-URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/'
-
-# This is a loop for downloading refseq genome fna data
-for i in ${VAR} #i variable takes the value of each line in the uniqueID.txt file
-	do
-		#echo to command what is happening in real time to know progress
-		echo "Downloading refseq file: ${i}"
-		# Downloading refseq entries
-		wget ${URL}${i}.genomic.fna.gz
-		echo "Done downloading ${i}"
-		# Construct concatenated file of all
-		zcat ${i}.genomic.fna.gz >> ${type}.fna #use zcat instead of cat because gzip
-		# We don't need individual copy of the file that was created from NCBI, so remove it
-		rm ${i}.fasta
-	done
-
 #we can make a list of the names to reference for downloading, or we can use the list to sort to find the highest number.
 #I'm in favor of the first option, because some files are missing and we end up creating empty files...
 #For instance, fungi only has 99 files, but its highest value is 103.1. Four numbers are missing, and we created those empty files.
@@ -49,10 +26,3 @@ for i in ${VAR} #i variable takes the value of each line in the uniqueID.txt fil
 # vertebrate_mammalian_to_sort.txt:912
 # vertebrate_other_to_sort.txt:841
 # viral_to_sort.txt:4
-
-
-amt=$(SAM PUT COOL COMMAND HERE)
-
-for z in $(seq "$amt");
-do  curl -o "$type"."$z".1.genomic.fna.gz https://ftp.ncbi.nlm.nih.gov/refseq/release/bacteria/bacteria."$z".1.genomic.fna.gz
-done
