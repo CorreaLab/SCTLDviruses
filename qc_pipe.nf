@@ -17,7 +17,7 @@ def helpMessage() {
 if (params.help) {
 helpMessage()
 exit 0
-} 
+}
 
 if (params.readsTest) {
     println("\n\tRunning vAMPirus with TEST dataset\n")
@@ -81,6 +81,7 @@ if (params.Clean)  {
 
             script:
             """
+                set +e
                 echo ${sample_id}
                 fastp -i ${reads[0]} -I ${reads[1]} -o left-${sample_id}.filter.fq -O right-${sample_id}.filter.fq --detect_adapter_for_pe \
                 --average_qual ${params.avQ} -q ${params.trimq} -l ${params.len} -y -Y ${params.comp} -g -x -n ${params.mN} -c --overrepresentation_analysis --html ${sample_id}.fastp.html --json ${sample_id}.fastp.json --thread ${task.cpus} \
