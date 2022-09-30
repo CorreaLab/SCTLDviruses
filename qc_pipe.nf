@@ -76,7 +76,7 @@ if (params.Clean)  {
 
             output:
                 tuple sample_id, file("*.fastp.{json,html}") into fastp_results
-                tuple sample_id, file("*.fastp.{json}") into fastp_json
+                tuple sample_id, file("*.fastp.json") into fastp_json
                 tuple sample_id, file("*.filter.fq") into readsforqc2
 
             script:
