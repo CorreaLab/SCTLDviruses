@@ -77,7 +77,7 @@ if (params.Clean)  {
             output:
                 tuple sample_id, file("*.fastp.{json,html}") into fastp_results
                 tuple sample_id, file("*.fastp.json") into fastp_json
-                tuple sample_id, file("*.filter.fq") into readsforqc2
+                tuple sample_id, file("*.filter.fq") into readsforqc2,reads4norm
 
             script:
             """
@@ -111,6 +111,30 @@ if (params.Clean)  {
                     """
                     fastqc --quiet --threads ${task.cpus} ${reads}
                     """
+            }
+
+            if (params.Norm)  {
+
+                process Normilization {
+
+                        label 'high_cpus'
+
+                        tag "${sample_id}"
+
+                        publishDir "${params.workingdir}/${params.outdir}/ReadProcessing/Normilization", mode: "copy", overwrite: true
+
+                        input:
+                            tuple sample_id, file(reads) from reads4norm
+
+                        output:
+                            tuple sample_id, file("*norm*") into norms
+
+                        script:
+                            """
+                            bbnorm.sh in1=${reads[0]} in2=${reads[1]} out1=left-${sample_id}.norm.fq.gz out2=right-${sample_id}.norm.fq.gz target=${params.target} min=${params.minimum} threads=${task.cpu}
+                            """
+                    }
+
             }
 
         }

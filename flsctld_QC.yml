@@ -10,3 +10,4 @@ channels:
 dependencies:
     - fastp=0.23.2
     - fastqc=0.11.8
+    - bbmap=39.00
