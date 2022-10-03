@@ -131,7 +131,7 @@ if (params.Clean)  {
 
                         script:
                             """
-                            bbnorm.sh in1=${reads[0]} in2=${reads[1]} out1=left-${sample_id}.norm.fq.gz out2=right-${sample_id}.norm.fq.gz target=${params.target} min=${params.minimum} threads=${task.cpu}
+                            bbnorm.sh in1=${reads[0]} in2=${reads[1]} out1=left-${sample_id}.norm.fq.gz out2=right-${sample_id}.norm.fq.gz target=${params.target} min=${params.minimum} threads=${task.cpu} -eoom
                             """
                     }
 
