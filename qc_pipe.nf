@@ -19,23 +19,17 @@ helpMessage()
 exit 0
 }
 
-if (params.readsTest) {
-    println("\n\tRunning vAMPirus with TEST dataset\n")
+if (params.Norm) {
+    println("\n\tLocating paired read files...\n")
     Channel
-        .fromFilePairs(params.readsTest)
-        .ifEmpty{ exit 1, "params.readTest was empty - no input files supplied" }
-        .into{ reads_ch; reads_qc_ch; reads_processing }
-} else if (params.single) {
-    println("\n\tLocating single read files...\n")
-    Channel
-        .fromFilePairs("${params.reads}", size: -1, checkIfExists: true)
-        .ifEmpty{ exit 1, "params.reads was empty - no input files supplied" }
-        .into{ reads_ch; reads_qc_ch; reads_processing }
+        .fromFilePairs("${params.filtreads}", checkIfExists: true)
+        .ifEmpty{ exit 1, "${params.filtreads} was empty - no input files supplied" }
+        .set{ reads_norm_ch }
 } else {
     println("\n\tLocating paired read files...\n")
     Channel
         .fromFilePairs("${params.reads}", checkIfExists: true)
-        .ifEmpty{ exit 1, "params.reads was empty - no input files supplied" }
+        .ifEmpty{ exit 1, "${params.reads} was empty - no input files supplied" }
         .into{ reads_ch; reads_qc_ch}
 }
 
@@ -115,16 +109,8 @@ if (params.Clean)  {
 
         }
 
+
 if (params.Norm)  {
-
-        println("\n\tLocating paired read files...\n")
-        Channel
-            .fromFilePairs("${params.filtreads}", checkIfExists: true)
-            .ifEmpty{ exit 1, "params.reads was empty - no input files supplied" }
-            .into{ reads_norm_ch}
-    }
-
-    if (params.Norm)  {
 
         process Normilization {
 
@@ -144,6 +130,6 @@ if (params.Norm)  {
                     """
                     bbnorm.sh in1=${reads[0]} in2=${reads[1]} out1=left-${sample_id}.norm.fq.gz out2=right-${sample_id}.norm.fq.gz target=${params.target} min=${params.minimum} threads=${task.cpu} -eoom
                     """
-            }
-
         }
+
+}
