@@ -77,13 +77,13 @@ if (params.Clean)  {
             output:
                 tuple sample_id, file("*.fastp.{json,html}") into fastp_results
                 tuple sample_id, file("*.fastp.json") into fastp_json
-                tuple sample_id, file("*.filter.fq") into readsforqc2,reads4norm
+                tuple sample_id, file("*.filter.fq") into readsforqc2
 
             script:
             """
                 set +e
                 echo ${sample_id}
-                fastp -i ${reads[0]} -I ${reads[1]} -o left-${sample_id}.filter.fq -O right-${sample_id}.filter.fq --detect_adapter_for_pe \
+                fastp -i ${reads[0]} -I ${reads[1]} -o left-${sample_id}.filter.R1.fq -O right-${sample_id}.filter.R2.fq --detect_adapter_for_pe \
                 --average_qual ${params.avQ} -q ${params.trimq} -l ${params.len} -y -Y ${params.comp} -g -x -n ${params.mN} -c --overrepresentation_analysis --html ${sample_id}.fastp.html --json ${sample_id}.fastp.json --thread ${task.cpus} \
                 --report_title ${sample_id}
                 """
@@ -121,7 +121,7 @@ if (params.Norm)  {
         Channel
             .fromFilePairs("${params.filtreads}", checkIfExists: true)
             .ifEmpty{ exit 1, "params.reads was empty - no input files supplied" }
-            .into{ reads_ch; reads_qc_ch}
+            .into{ reads_norm_ch}
     }
 
     if (params.Norm)  {
@@ -135,7 +135,7 @@ if (params.Norm)  {
                 publishDir "${params.workingdir}/${params.outdir}/ReadProcessing/Normilization", mode: "copy", overwrite: true
 
                 input:
-                    tuple sample_id, file(reads) from reads4norm
+                    tuple sample_id, file(reads) from reads_norm_ch
 
                 output:
                     tuple sample_id, file("*norm*") into norms
