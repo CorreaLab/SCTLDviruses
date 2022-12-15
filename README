@@ -1,1 +1,8 @@
 This is a repository for the scripts and workflows used to analyze FL SCTLD RNA sequencing data
+
+Within this repository you can find:
+
+  1. qc_pipe.nf -> the quality control pipeline written as a Nextflow script
+  2. qc_pipe.config -> the quality control configuration file containing all the parameters used for the commands in the pipeline
+  3. flsctld_QC.yml -> a yaml file that can be used to create a conda environment containing the programs used in the quality control pipeline
+  4. SPRING_2022 -> Code used to asses RNA sequencing data and Symbiodiniaceae ITS2 data in Spring 2022
